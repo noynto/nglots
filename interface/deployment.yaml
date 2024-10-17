@@ -27,11 +27,11 @@ spec:
               protocol: TCP
           resources:
             requests:
-              cpu: 600m
-              memory: 600Mi
+              cpu: 50m
+              memory: 100Mi
             limits:
-              cpu: 800m
-              memory: 1000Mi
+              cpu: 100m
+              memory: 200Mi
           volumeMounts:
             - mountPath: /opt/data/assets
               name: data

@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: interface
+  labels:
+    name: interface
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: interface
+  template:
+    metadata:
+      labels:
+        name: interface
+    spec:
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: interface
+      containers:
+        - name: penpot-interface
+          image: docker.io/penpotapp/frontend:2.2.0
+          ports:
+            - containerPort: 80
+              name: default
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 600m
+              memory: 600Mi
+            limits:
+              cpu: 800m
+              memory: 1000Mi
+          volumeMounts:
+            - mountPath: /opt/data/assets
+              name: data
+          env:
+            - name: PENPOT_FLAGS
+              value: "enable-registration enable-login-with-password"
+            - name: PENPOT_BACKEND_URI
+              value: "server:6060"
+            - name: PENPOT_EXPORTER_URI
+              value: "exporter:6061"

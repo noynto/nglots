@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres
+data:
+  USERNAME: "nglots"
+  DATABASE: "nglots"

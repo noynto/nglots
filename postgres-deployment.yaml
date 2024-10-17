@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  labels:
+    name: postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: postgres
+  template:
+    metadata:
+      labels:
+        name: postgres
+    spec:
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: postgres
+      containers:
+        - name: postgres
+          image: docker.io/postgres:16.3-alpine
+          ports:
+            - containerPort: 5432
+              name: default
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 50m
+              memory: 100Mi
+            limits:
+              cpu: 100m
+              memory: 200Mi
+          volumeMounts:
+            - mountPath: /var/lib/postgres/data
+              name: data
+          env:
+            - name: POSTGRES_INITDB_ARGS
+              value: "--data-checksums"
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: PASSWORD
+                  name: postgres
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  key: USERNAME
+                  name: postgres
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  key: DATABASE
+                  name: postgres

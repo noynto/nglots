@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server
+  labels:
+    name: server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: server
+  template:
+    metadata:
+      labels:
+        name: server
+    spec:
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: server
+      containers:
+        - name: penpot-backend
+          image: docker.io/penpotapp/backend:2.2.0
+          ports:
+            - containerPort: 80
+              name: default
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 50m
+              memory: 100Mi
+            limits:
+              cpu: 100m
+              memory: 200Mi
+          volumeMounts:
+            - mountPath: /opt/data/assets
+              name: data
+          env:
+            - name: PENPOT_DATABASE_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  key: USERNAME
+                  name: database
+            - name: PENPOT_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: PASSWORD
+                  name: database
+            - name: PENPOT_DATABASE_URI
+              value: "postgresql://database:5432/nglots"
+            - name: PENPOT_ASSETS_STORAGE_BACKEND
+              value: "assets-fs"
+            - name: PENPOT_STORAGE_ASSETS_FS_DIRECTORY
+              value: "/opt/data/assets"
+            - name: PENPOT_REDIS_URI
+              value: "redis://cache:6379/0"
+            - name: PENPOT_TELEMETRY_ENABLED
+              value: "true"

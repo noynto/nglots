@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+  labels:
+    name: redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: redis
+  template:
+    metadata:
+      labels:
+        name: redis
+    spec:
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: redis
+      containers:
+        - name: redis
+          image: docker.io/redis:7.4-alpine
+          ports:
+            - containerPort: 6379
+              name: default
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 50m
+              memory: 100Mi
+            limits:
+              cpu: 100m
+              memory: 200Mi
+          volumeMounts:
+            - mountPath: /data
+              name: data

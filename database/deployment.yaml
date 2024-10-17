@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: postgres
+  name: database
   labels:
-    name: postgres
+    name: database
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: postgres
+      name: database
   template:
     metadata:
       labels:
-        name: postgres
+        name: database
     spec:
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: postgres
+            claimName: database
       containers:
         - name: postgres
           image: docker.io/postgres:16.3-alpine
@@ -42,14 +42,14 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: PASSWORD
-                  name: postgres
+                  name: database
             - name: POSTGRES_USER
               valueFrom:
                 configMapKeyRef:
                   key: USERNAME
-                  name: postgres
+                  name: database
             - name: POSTGRES_DB
               valueFrom:
                 configMapKeyRef:
                   key: DATABASE
-                  name: postgres
+                  name: database

@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: exporter
+  labels:
+    name: exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: exporter
+  template:
+    metadata:
+      labels:
+        name: exporter
+    spec:
+      containers:
+        - name: penpot-exporter
+          image: docker.io/penpotapp/exporter:2.2.0
+          ports:
+            - containerPort: 6061
+              name: default
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 600m
+              memory: 600Mi
+            limits:
+              cpu: 800m
+              memory: 1000Mi
+          env:
+            - name: PENPOT_PUBLIC_URI
+              value: "https://design.noynto.me"
+            - name: PENPOT_REDIS_URI
+              value: "redis://cache:6379/0"
+            - name: PENPOT_TELEMETRY_ENABLED
+              value: "true"

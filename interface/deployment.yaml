@@ -17,7 +17,7 @@ spec:
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: interface
+            claimName: server
       containers:
         - name: penpot-interface
           image: docker.io/penpotapp/frontend:2.2.0

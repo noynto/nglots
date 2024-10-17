@@ -22,7 +22,7 @@ spec:
         - name: penpot-backend
           image: docker.io/penpotapp/backend:2.2.0
           ports:
-            - containerPort: 80
+            - containerPort: 6060
               name: default
               protocol: TCP
           resources:

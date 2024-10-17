@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: redis
+  name: cache
   labels:
-    name: redis
+    name: cache
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: redis
+      name: cache
   template:
     metadata:
       labels:
-        name: redis
+        name: cache
     spec:
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: redis
+            claimName: cache
       containers:
         - name: redis
           image: docker.io/redis:7.4-alpine

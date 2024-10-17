@@ -39,6 +39,6 @@ spec:
             - name: PENPOT_FLAGS
               value: "enable-registration enable-login-with-password"
             - name: PENPOT_BACKEND_URI
-              value: "server:6060"
+              value: "http://server:6060"
             - name: PENPOT_EXPORTER_URI
-              value: "exporter:6061"
+              value: "http://exporter:6061"
